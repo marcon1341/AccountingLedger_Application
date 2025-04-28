@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
@@ -79,5 +81,37 @@ public class Transactions {
             }
         }
     }
+    public static void ledgerMenu(){
+        Scanner s = new Scanner(System.in);
+        String userInput;
+        do{
+        System.out.println("""
+                        A - All
+                        D - Deposit
+                        P - View Payment
+                        R - Reports
+                        H - Back - go back to the report page
+                        """);
+        System.out.println("Enter your choice");
+        userInput = s.nextLine();
+        if(userInput.equalsIgnoreCase("a")){
+            //allTransactions();
+        } else if(userInput.equalsIgnoreCase("d")) {
+            System.out.println("View Deposit");
+        } else if(userInput.equalsIgnoreCase("p")){
+            System.out.println("View Payment");
+        }else if(userInput.equalsIgnoreCase("r")){
+            System.out.println("View Reports");
+        }else if(userInput.equalsIgnoreCase("h")){
+            System.out.println("Return to Home Screen");
+        }else {
+            System.out.println("Invalid option try again");
+        }
+        }while(!userInput.equalsIgnoreCase("h"));
+        s.close();
+    }
+
 }
+
+
 

@@ -26,7 +26,7 @@ public class AccountingApplication {
             } else if (userInput.equalsIgnoreCase("p")) {
                 Transactions.makePayment();
             } else if (userInput.equalsIgnoreCase("l")) {
-                System.out.println("View Ledge");
+                Transactions.ledgerMenu();
             } else if (userInput.equalsIgnoreCase("x")) {
                 System.out.println("Exiting The Application");
             } else {
