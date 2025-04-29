@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Transactions {
@@ -103,7 +105,7 @@ public class Transactions {
             } else if (userInput.equalsIgnoreCase("p")) {
                 viewPayments();
             } else if (userInput.equalsIgnoreCase("r")) {
-               reportMenu();
+                reportMenu();
             } else if (userInput.equalsIgnoreCase("h")) {
                 System.out.println("Return to Home Screen");
             } else {
@@ -178,6 +180,7 @@ public class Transactions {
             System.out.println("Error reading transactions.csv: " + e.getMessage());
         }
     }
+
     //report menu screen
     public static void reportMenu() {
         Scanner s = new Scanner(System.in);
@@ -196,7 +199,7 @@ public class Transactions {
             userInput = s.nextLine();
 
             if (userInput.equals("1")) {
-                System.out.println("month to date report");
+               monthToDate();
             } else if (userInput.equals("2")) {
                 System.out.println("previous month");
             } else if (userInput.equals("3")) {
@@ -210,11 +213,36 @@ public class Transactions {
             } else {
                 System.out.println("Invalid option try again: ");
             }
-        }while (!userInput.equals("0")) ;
+        } while (!userInput.equals("0"));
+    }
+
+    public static void monthToDate() {
+        try {
+            FileReader flReader = new FileReader("transactions.csv");
+            BufferedReader br = new BufferedReader(flReader);
+            String line;
+            System.out.println("Month to date transaction");
+            br.readLine();//to skip the header
+            LocalDate today = LocalDate.now();//to get todays date
+
+            while ((line = br.readLine()) != null) {
+                String[] on = line.split("\\|");
+                String date = on[0];
+                //parsing the date
+                LocalDate transactionDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+                //to compare year and month
+                if (transactionDate.getYear() == today.getYear() && transactionDate.getMonth() == today.getMonth()) {
+                    System.out.println(line);
+                }
+            }
+            br.close();
+        } catch (Exception e) {
+            System.out.println("Error reading transactions.csv: " + e.getMessage());
+        }
     }
 
 }
-
 
 
 
