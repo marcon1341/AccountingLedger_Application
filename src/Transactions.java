@@ -203,7 +203,7 @@ public class Transactions {
             } else if (userInput.equals("2")) {
                 previousMonth();
             } else if (userInput.equals("3")) {
-                System.out.println("year to date");
+                yearToDate();
             } else if (userInput.equals("4")) {
                 System.out.println("previous year");
             } else if (userInput.equals("5")) {
@@ -241,6 +241,7 @@ public class Transactions {
             System.out.println("Error reading transactions.csv: " + e.getMessage());
         }
     }
+    //new method added for previous month
     public static void previousMonth() {
         try {
             FileReader flReader = new FileReader("transactions.csv");
@@ -270,6 +271,36 @@ public class Transactions {
             System.out.println("Error reading transactions.csv: " + e.getMessage());
         }
 
+    }
+    //new method for year to date
+    public static void yearToDate() {
+
+        try {
+            FileReader flReader = new FileReader("transactions.csv");
+            BufferedReader br = new BufferedReader(flReader);
+            String line;
+
+            System.out.println("Year to date transaction");
+
+            br.readLine();//to skip the header
+
+            LocalDate today = LocalDate.now();//to get todays date
+
+            while ((line = br.readLine()) != null) {
+                String[] on = line.split("\\|");
+                String date = on[0];
+                //parsing the date
+                LocalDate transactionDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+                //to compare year and month
+                if (transactionDate.getYear() == today.getYear()) {
+                    System.out.println(line);
+                }
+            }
+            br.close();
+        } catch (Exception e) {
+            System.out.println("Error reading transactions.csv: " + e.getMessage());
+        }
     }
 
 }
