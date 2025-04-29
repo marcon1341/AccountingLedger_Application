@@ -205,9 +205,9 @@ public class Transactions {
             } else if (userInput.equals("3")) {
                 yearToDate();
             } else if (userInput.equals("4")) {
-                System.out.println("previous year");
+                previousYear();
             } else if (userInput.equals("5")) {
-                System.out.println("search by vendor");
+               searchVendor();
             } else if (userInput.equals("0")) {
                 System.out.println("back to leadger menu");
             } else {
@@ -299,6 +299,62 @@ public class Transactions {
             }
             br.close();
         } catch (Exception e) {
+            System.out.println("Error reading transactions.csv: " + e.getMessage());
+        }
+    }
+    public static void previousYear() {
+        try {
+            FileReader flReader = new FileReader("transactions.csv");
+            BufferedReader br = new BufferedReader(flReader);
+            String line;
+
+            System.out.println("Previous year transaction");
+
+            br.readLine();//to skip the header
+
+            LocalDate today = LocalDate.now();//to get todays date
+            LocalDate lastYear = today.minusYears(1);
+
+            while ((line = br.readLine()) != null) {
+                String[] on = line.split("\\|");
+                String date = on[0];
+                //parsing the date
+                LocalDate transactionDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+                //To compare year
+                if (transactionDate.getYear() == lastYear.getYear()) {
+                    System.out.println(line);
+                }
+            }
+            br.close();
+        } catch (Exception e) {
+            System.out.println("Error reading transactions.csv: " + e.getMessage());
+        }
+
+    }
+    public static void searchVendor(){
+        Scanner s = new Scanner(System.in);
+        try {
+            FileReader flReader = new FileReader("transactions.csv");
+            BufferedReader br = new BufferedReader(flReader);
+            String line;
+
+            System.out.println("Enter vendor name: ");
+            String searchVendor = s.nextLine().toLowerCase();//to make it read lowercase too
+            System.out.println("\nMatching vendors: ");
+            br.readLine();
+            while ((line = br.readLine())!=null) {
+                String[] on = line.split("\\|");
+                String vendor = on[3].toLowerCase();
+
+                if (vendor.contains(searchVendor)) {
+                    System.out.println(line);
+                }
+            }
+            br.close();
+        }
+
+        catch (Exception e) {
             System.out.println("Error reading transactions.csv: " + e.getMessage());
         }
     }
