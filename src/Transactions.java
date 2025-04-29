@@ -353,7 +353,6 @@ public class Transactions {
             }
             br.close();
         }
-
         catch (Exception e) {
             System.out.println("Error reading transactions.csv: " + e.getMessage());
         }
