@@ -103,7 +103,7 @@ public class Transactions {
             } else if (userInput.equalsIgnoreCase("p")) {
                 viewPayments();
             } else if (userInput.equalsIgnoreCase("r")) {
-                System.out.println("View Reports");
+               reportMenu();
             } else if (userInput.equalsIgnoreCase("h")) {
                 System.out.println("Return to Home Screen");
             } else {
@@ -178,7 +178,43 @@ public class Transactions {
             System.out.println("Error reading transactions.csv: " + e.getMessage());
         }
     }
+    //report menu screen
+    public static void reportMenu() {
+        Scanner s = new Scanner(System.in);
+        String userInput;
+        do {
+            System.out.println("""
+                    Report Menu:
+                    1 - Month To Date
+                    2 - Previous Month
+                    3 - Year To Date
+                    4 - Previous Year
+                    5 - Search by Vendor
+                    0 - Back to Ledger Menu
+                    """);
+            System.out.println("Enter your choice: ");
+            userInput = s.nextLine();
+
+            if (userInput.equals("1")) {
+                System.out.println("month to date report");
+            } else if (userInput.equals("2")) {
+                System.out.println("previous month");
+            } else if (userInput.equals("3")) {
+                System.out.println("year to date");
+            } else if (userInput.equals("4")) {
+                System.out.println("previous year");
+            } else if (userInput.equals("5")) {
+                System.out.println("search by vendor");
+            } else if (userInput.equals("0")) {
+                System.out.println("back to leadger menu");
+            } else {
+                System.out.println("Invalid option try again: ");
+            }
+        }while (!userInput.equals("0")) ;
+    }
+
 }
+
 
 
 
