@@ -29,6 +29,7 @@ public class Transaction {
         public double getAmount(){
             return this.amount;
         }
+
         //add formating for display
         @Override
         public String toString(){
