@@ -51,7 +51,7 @@ class Transactions {
                 fileWriter.write(transaction + "\n");
                 fileWriter.close();
 
-                System.out.println("Deposit added successfully!");
+                System.out.println("Deposit added successfully! \n");
             } catch (IOException e) {
                 System.out.println("Error writing to file: " + e.getMessage());
             }
@@ -86,7 +86,7 @@ class Transactions {
                 FileWriter fileWriter = new FileWriter("transactions.csv", true);
                 fileWriter.write(transaction + "\n");
                 fileWriter.close();
-                System.out.println("Payment added successfully thanks!");
+                System.out.println("Payment added successfully thanks!\n");
 
             } catch (IOException e) {
                 System.out.println("Error writing to file: " + e.getMessage());
@@ -96,38 +96,8 @@ class Transactions {
         }
     }
 
-    public static void ledgerMenu(Scanner s) {
-
-        String userInput;
-        do {
-            System.out.println("""
-                    A - All
-                    D - Deposit
-                    P - View Payment
-                    R - Reports
-                    H - Back - go back to the report page
-                    """);
-            System.out.println("Enter your choice");
-            userInput = s.nextLine();
-            if (userInput.equalsIgnoreCase("a")) {
-                viewTransactions();
-            } else if (userInput.equalsIgnoreCase("d")) {
-                viewDeposits();
-            } else if (userInput.equalsIgnoreCase("p")) {
-                viewPayments();
-            } else if (userInput.equalsIgnoreCase("r")) {
-                reportMenu();
-            } else if (userInput.equalsIgnoreCase("h")) {
-                System.out.println("Returning to Home Screen");
-                break;//exit the loop to home menu
-            } else {
-                System.out.println("Invalid option try again");
-            }
-        } while (!userInput.equalsIgnoreCase("h"));
-
-    }
     public static void viewTransactions() {
-        System.out.println("~~~~ All Transactions ~~~~");
+        System.out.println("############### All Transactions ###############\n");
         try {
             FileReader flReader = new FileReader("transactions.csv");
             BufferedReader br = new BufferedReader(flReader);
@@ -146,7 +116,7 @@ class Transactions {
     }
     //new method for view deposits
     public static void viewDeposits() {
-        System.out.println("~~~~ Deposits List ~~~~");
+        System.out.println("############### Deposits List ###############\n");
         try {
             FileReader flReader = new FileReader("transactions.csv");
             BufferedReader br = new BufferedReader(flReader);
@@ -168,7 +138,7 @@ class Transactions {
 
     //view payment method to see negative amount payments
     public static void viewPayments() {
-        System.out.println("~~~~ Payments List ~~~~");
+        System.out.println("############### Payments List ###############\n");
         try  {
             FileReader flReader = new FileReader("transactions.csv");
             BufferedReader br = new BufferedReader(flReader);
@@ -186,46 +156,11 @@ class Transactions {
         }
     }
 
-    //report menu screen
-    public static void reportMenu() {
-        Scanner s = new Scanner(System.in);
-        String userInput;
-        do {
-            System.out.println("""
-                    Report Menu:
-                    1 - Month To Date
-                    2 - Previous Month
-                    3 - Year To Date
-                    4 - Previous Year
-                    5 - Search by Vendor
-                    0 - Back to Ledger Menu
-                    """);
-            System.out.println("Enter your choice: ");
-            userInput = s.nextLine();
-
-            if (userInput.equals("1")) {
-                monthToDate();
-            } else if (userInput.equals("2")) {
-                previousMonth();
-            } else if (userInput.equals("3")) {
-                yearToDate();
-            } else if (userInput.equals("4")) {
-                previousYear();
-            } else if (userInput.equals("5")) {
-                searchVendor();
-            } else if (userInput.equals("0")) {
-                Transactions.ledgerMenu(s);
-            } else {
-                System.out.println("Invalid option try again: ");
-            }
-        } while (!userInput.equals("0"));
-    }
-
     //method for month to date
     //Changed all reporting methods (e.g., monthToDate, previousMonth, etc.) to use the parseTransaction() method with the Transaction class instead of manually splitting each line. This reduces duplication, improves readability, and allows safer access to transaction fields like date, vendor, and amount.
 
     public static void monthToDate() {
-        System.out.println("~~~~ Month To Date Transactions ~~~~");
+        System.out.println("############### Month To Date Transactions ###############\n");
         try {
             FileReader flReder = new FileReader("transactions.csv");
             BufferedReader br = new BufferedReader(flReder);
@@ -241,8 +176,9 @@ class Transactions {
                     LocalDate transactionDate = LocalDate.parse(t.getDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
                     //copare year and month
-                    if (transactionDate.getYear() == today.getYear() && transactionDate.getMonth() == today.getMonth());
-                    System.out.println(t);
+                    if (transactionDate.getYear() == today.getYear() && transactionDate.getMonth() == today.getMonth()) {
+                        System.out.println(t);
+                    }
                 }
             }
 
@@ -253,7 +189,7 @@ class Transactions {
     }
 
     public static void previousMonth(){
-        System.out.println("~~~~ Previous Month Transactions ~~~~");
+        System.out.println("############### Previous Month Transactions ###############\n");
         try {
             FileReader flReder = new FileReader("transactions.csv");
             BufferedReader br = new BufferedReader(flReder);
@@ -283,7 +219,7 @@ class Transactions {
 
 
     public static void yearToDate() {
-        System.out.println("~~~~ Year To Date Transactions ~~~~");
+        System.out.println("############### Year To Date Transactions ###############\n");
 
         try {
             FileReader flReader = new FileReader("transactions.csv");
@@ -310,7 +246,7 @@ class Transactions {
     }
 
     public static void previousYear() {
-        System.out.println("~~~~ Previous Year Transactions ~~~~");
+        System.out.println("############### Previous Year Transactions ###############\n");
         try {
             FileReader flReader = new FileReader("transactions.csv");
             BufferedReader br = new BufferedReader(flReader);
@@ -338,7 +274,7 @@ class Transactions {
     public static void searchVendor(){
         Scanner s = new Scanner(System.in);
         String search = s.nextLine().toLowerCase();
-        System.out.println("~~~~ Transaction Matching Vendor ~~~~");
+        System.out.println("############### Transaction Matching Vendor ###############\n");
         try{
             FileReader flReader = new FileReader("transactions.csv");
             BufferedReader br = new BufferedReader(flReader);
