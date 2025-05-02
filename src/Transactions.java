@@ -186,7 +186,7 @@ class Transactions {
                     //to flitter transaction by time using LocalDate
                     LocalDate transactionDate = LocalDate.parse(t.getDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-                    //compare year and month
+                    //compare the date to todays year and month
                     if (transactionDate.getYear() == today.getYear() && transactionDate.getMonth() == today.getMonth()) {
                         System.out.println(t);
                     }
@@ -320,6 +320,7 @@ class Transactions {
 
         System.out.println("############### Custom Search ###############");
 
+        //optional flitters
         System.out.print("Start Date (yyyy-MM-dd): ");
         String startInput = s.nextLine();
 
@@ -329,7 +330,7 @@ class Transactions {
         System.out.print("Description: ");
         String description = s.nextLine().toLowerCase();
 
-        System.out.print("Vendor (leave blank to skip): ");
+        System.out.print("Vendor: ");
         String vendor = s.nextLine().toLowerCase();
 
         System.out.print("Amount: ");
