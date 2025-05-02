@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -16,9 +17,9 @@ class Transactions {
         String time = parts[1];
         String description = parts[2];
         String vendor = parts[3];
-        double amount = Double.parseDouble(parts[4]);
+        double amount = Double.parseDouble(parts[4]);//to convert transaction amount from string to double
 
-        return new Transaction(date, time, description, vendor, amount);//
+        return new Transaction(date, time, description, vendor, amount);//record the new transaction
     }
 
 
@@ -26,14 +27,11 @@ class Transactions {
     public static void addDeposit() {
         Scanner s = new Scanner(System.in);
 
+        //insert present date automatically
+        String date = LocalDate.now().toString();
 
-        //asks the user to input date
-        System.out.print("Enter the date (yyyy-mm-dd): ");
-        String date = s.nextLine();
-
-        //asks teh user to input time
-        System.out.print("Enter the time (HH:mm:ss): ");
-        String time = s.nextLine();
+        //insert present time automatically
+        String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
         //asks the user to input description
         System.out.print("Enter the description: ");
@@ -46,11 +44,11 @@ class Transactions {
 
          //asks the user to input amount
         System.out.println("Enter the amount: ");
-        if (s.hasNextDouble()) {//check the validity(double like 99.99 and prevent the crash from invalid input e.g"amazon"
+        if (s.hasNextDouble()) {//check the validity(double like 99.99 and prevent the crash from invalid input e.g "amazon"
             double amount = s.nextDouble();
             s.nextLine();//new line
 
-            //  format the transaction display line
+            //  format the new transaction display line
             String transaction = date + "|" + time + "|" + description + "|" + vendor + "|" + String.format("%.2f", amount);
 
             // FileWriter to write on transaction.csv using try and catch exception
@@ -73,11 +71,11 @@ class Transactions {
 
         Scanner s = new Scanner(System.in);
 
-        System.out.print("Enter the date (yyyy-mm-dd): ");
-        String date = s.nextLine();
+        //insert present date automatically
+        String date = LocalDate.now().toString();
 
-        System.out.print("Enter the time (HH:mm:ss): ");
-        String time = s.nextLine();
+        //insert present time automatically
+        String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
         System.out.print("Enter the description: ");
         String description = s.nextLine();
@@ -184,6 +182,8 @@ class Transactions {
             while ((line = br.readLine()) != null) {
                 Transaction t = parseTransaction(line);
                 if (t != null) {
+
+                    //to flitter transaction by time using LocalDate
                     LocalDate transactionDate = LocalDate.parse(t.getDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
                     //compare year and month
@@ -290,7 +290,7 @@ class Transactions {
         Scanner s = new Scanner(System.in);
         System.out.print("Enter vendor's name to search: ");
 
-        String search = s.nextLine().toLowerCase();//to store the variable to search and make it case insensitive
+        String search = s.nextLine().trim().toLowerCase();//to store the variable to search and make it case insensitive
 
         System.out.println("############### Transaction Matching Vendor ###############\n");
 
@@ -302,12 +302,91 @@ class Transactions {
 
             while ((line = br.readLine())!= null){
                 Transaction t = parseTransaction(line);
-                if(t!=null && t.getVendor().toLowerCase().contains(search)){
+                if(t!=null && t.getVendor().toLowerCase().contains(search)){//allows partial search
                     System.out.println(t);
 
                 }
             }
 
+        } catch (IOException e) {
+            System.out.println("Error reading transactions.csv: " + e.getMessage());
+        }
+    }
+
+    //custom search method
+    public static void customSearch() {
+
+        Scanner s = new Scanner(System.in);//scanner object to read input
+
+        System.out.println("############### Custom Search ###############");
+
+        System.out.print("Start Date (yyyy-MM-dd): ");
+        String startInput = s.nextLine();
+
+        System.out.print("End Date (yyyy-MM-dd): ");
+        String endInput = s.nextLine();
+
+        System.out.print("Description: ");
+        String description = s.nextLine().toLowerCase();
+
+        System.out.print("Vendor (leave blank to skip): ");
+        String vendor = s.nextLine().toLowerCase();
+
+        System.out.print("Amount: ");
+        String amountInput = s.nextLine();
+
+        LocalDate startDate;
+        if (startInput.isEmpty()) {
+            startDate = null;
+        } else {
+            startDate = LocalDate.parse(startInput);//to Parse start date input to LocalDate
+        }
+
+        LocalDate endDate;
+        if (endInput.isEmpty()) {
+            endDate = null;
+        } else {
+            endDate = LocalDate.parse(endInput);//to Parse end date input to LocalDate
+        }
+
+        Double amount;
+        if (amountInput.isEmpty()) {
+            amount = null;
+        } else {
+            amount = Double.parseDouble(amountInput);//to Parse amount input to Double
+        }
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("transactions.csv"));
+            String line;
+            br.readLine(); // skip header
+            while ((line = br.readLine()) != null) {
+                Transaction t = parseTransaction(line);
+                if (t == null) continue;// Skip this line if parsing failed
+
+                LocalDate transactionDate = LocalDate.parse(t.getDate());// Parse the transaction date from the object
+
+                boolean is = true;
+
+                // If the user provided a start date and the transaction is before that, it's not true
+                if (startDate != null && transactionDate.isBefore(startDate)) is = false;
+
+                // If there's an end date and the transaction is after it, it's not true
+                if (endDate != null && transactionDate.isAfter(endDate)) is = false;
+
+                // If the user gave a description, and it doesn't match the one in the transaction
+                if (!description.isEmpty() && !t.getDescription().toLowerCase().contains(description)) is = false;
+
+                // If a vendor name was given and doesn't appear in the transaction
+                if (!vendor.isEmpty() && !t.getVendor().toLowerCase().contains(vendor)) is = false;
+
+                // If the amount is specified and doesn't match exactly, it's not true
+                if (amount != null && t.getAmount() != amount) is = false;
+
+                if (is) {
+                    System.out.println(t);
+                }
+            }
         } catch (IOException e) {
             System.out.println("Error reading transactions.csv: " + e.getMessage());
         }

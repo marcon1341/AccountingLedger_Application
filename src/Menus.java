@@ -99,6 +99,7 @@ public class Menus {
                     3 - Year To Date
                     4 - Previous Year
                     5 - Search by Vendor
+                    6 - Custom Search
                     0 - Back to Ledger Menu
                     """);
             System.out.println("Enter your choice: ");
@@ -115,7 +116,11 @@ public class Menus {
                 Transactions.previousYear();
             } else if (userInput.equals("5")) {
                 Transactions.searchVendor();
-            } else if (userInput.equals("0")) {
+            }
+            else if(userInput.equals("6")){
+                Transactions.customSearch();
+            }
+            else if (userInput.equals("0")) {
                 ledgerMenu(s);//return to ledger menu
             } else {
                 System.out.println("Invalid option try again: ");
